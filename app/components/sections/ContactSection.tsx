@@ -34,7 +34,7 @@ export default function ContactSection() {
 
     // Spam prevention: limit to 1 submission per 30 seconds
     const now = Date.now()
-    if (now - lastSubmitTime < 30000) {
+    if (now - lastSubmitTime < 30000 && lastSubmitTime > 0) {
       errors.spam = 'Please wait 30 seconds before sending another message'
     }
 
