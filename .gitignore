@@ -16,6 +16,7 @@
 # misc
 .DS_Store
 *.pem
+*.docx
 
 # debug
 npm-debug.log*
@@ -33,3 +34,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 next.config.ts
+
+# large files
+*.docx
+*.pdf
+*.zip
