@@ -1,42 +1,57 @@
 'use client'
 
 import { useState } from 'react'
-import { z } from 'zod'
 import { motion } from 'framer-motion'
-import emailjs from '@emailjs/browser'
-import { fadeInUp, staggerContainer, buttonInteraction } from '@/lib/animationVariants'
+import { fadeInUp, staggerContainer } from '@/lib/animationVariants'
 import SectionContainer from '@/components/ui/SectionContainer'
 import Input from '@/components/ui/Input'
 import Textarea from '@/components/ui/Textarea'
 import Button from '@/components/ui/Button'
 import profileData from '@/data/profile.json'
 
-const contactSchema = z.object({
-  name: z.string().optional(),
-  message: z.string().min(10, 'Message must be at least 10 characters').max(1000, 'Message too long'),
-})
-
-const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || ''
-const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || ''
-const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ''
-
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
+    subject: '',
     message: ''
   })
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-  const [validationError, setValidationError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
+  const validateForm = () => {
+    const errors: Record<string, string> = {}
+
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required'
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Please enter a valid email address'
+    }
+
+    if (!formData.subject.trim()) {
+      errors.subject = 'Subject is required'
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = 'Message is required'
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Message must be at least 10 characters'
+    }
+
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setValidationError('')
+    setErrorMessage('')
 
-    const validation = contactSchema.safeParse(formData)
-    if (!validation.success) {
-      const firstError = validation.error.issues[0]?.message || 'Please check your input'
-      setValidationError(firstError)
+    if (!validateForm()) {
       setStatus('error')
       return
     }
@@ -44,34 +59,27 @@ export default function ContactSection() {
     setStatus('submitting')
 
     try {
-      const templateParams = {
-        from_name: formData.name || 'Anonymous',
-        from_email: 'Contact Form Submission - Email in message body',
-        message: formData.message,
-        to_email: profileData.email,
-      }
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
 
-      const result = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      )
+      const data = await response.json()
 
-      if (result.status === 200) {
+      if (response.ok) {
         setStatus('success')
-        setFormData({ name: '', message: '' })
+        setFormData({ name: '', email: '', subject: '', message: '' })
+        setFieldErrors({})
       } else {
-        throw new Error(`Failed to send: ${result.text || 'Unknown error'}`)
+        throw new Error(data.error || 'Failed to send message')
       }
     } catch (error) {
-      console.error('EmailJS error:', error)
+      console.error('Contact form error:', error)
       setStatus('error')
-      if (error instanceof Error) {
-        setErrorMessage(error.message || 'Failed to send message. Please try again.')
-      } else {
-        setErrorMessage('Failed to send message. Please email me directly.')
-      }
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to send message. Please try again.')
     }
   }
 
@@ -88,29 +96,61 @@ export default function ContactSection() {
           Get In Touch
         </motion.h2>
         <motion.p variants={fadeInUp} className="text-lg text-slate-600 text-center mb-10">
-          Have a project or opportunity? Send me a message and include your email if you want a reply.
+          Have a project or opportunity? Send me a message and I'll get back to you.
         </motion.p>
 
         <motion.form onSubmit={handleSubmit} variants={staggerContainer} className="space-y-6">
           <motion.div variants={fadeInUp}>
             <Input
-              label="Name (Optional)"
+              label="Name"
               placeholder="Your name"
               value={formData.name}
               onChange={(value) => setFormData({ ...formData, name: value })}
+              required
             />
+            {fieldErrors.name && (
+              <p className="text-red-500 text-sm mt-1">{fieldErrors.name}</p>
+            )}
           </motion.div>
+
+          <motion.div variants={fadeInUp}>
+            <Input
+              label="Email"
+              type="email"
+              placeholder="your@email.com"
+              value={formData.email}
+              onChange={(value) => setFormData({ ...formData, email: value })}
+              required
+            />
+            {fieldErrors.email && (
+              <p className="text-red-500 text-sm mt-1">{fieldErrors.email}</p>
+            )}
+          </motion.div>
+
+          <motion.div variants={fadeInUp}>
+            <Input
+              label="Subject"
+              placeholder="What is this regarding?"
+              value={formData.subject}
+              onChange={(value) => setFormData({ ...formData, subject: value })}
+              required
+            />
+            {fieldErrors.subject && (
+              <p className="text-red-500 text-sm mt-1">{fieldErrors.subject}</p>
+            )}
+          </motion.div>
+
           <motion.div variants={fadeInUp}>
             <Textarea
               label="Message"
-              placeholder="Write your message here. Please include your email address if you want me to reply."
+              placeholder="Write your message here..."
               value={formData.message}
               onChange={(value) => setFormData({ ...formData, message: value })}
               required
               rows={6}
             />
-            {validationError && (
-              <p className="text-red-500 text-sm mt-2">{validationError}</p>
+            {fieldErrors.message && (
+              <p className="text-red-500 text-sm mt-1">{fieldErrors.message}</p>
             )}
           </motion.div>
 
