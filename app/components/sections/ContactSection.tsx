@@ -23,9 +23,7 @@ export default function ContactSection() {
   const validateForm = () => {
     const errors: Record<string, string> = {}
 
-    if (!formData.name.trim()) {
-      errors.name = 'Name is required'
-    }
+    // Name is optional - no validation needed
 
     if (!formData.email.trim()) {
       errors.email = 'Email is required'
