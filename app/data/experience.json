@@ -1,0 +1,189 @@
+[
+  {
+    "id": "exp-1",
+    "title": "Case Manager",
+    "company": "Ethaar Inc.",
+    "location": "Clarkston, GA",
+    "startDate": "2025-01",
+    "endDate": null,
+    "responsibilities": [
+      "Manage 40+ active client cases monthly while maintaining 100% compliance with service delivery targets",
+      "Conduct comprehensive assessments and develop individualized service plans for each client",
+      "Achieve 100% timely documentation and updates in Salesforce case management system",
+      "Connect 100% of eligible clients to housing, healthcare, education, and social service programs",
+      "Coordinate with 10+ partner agencies to ensure efficient service delivery and avoid duplication",
+      "Respond to client crises within required response time and document all incidents for compliance",
+      "Deliver client education sessions on safety, rights, and emergency preparedness"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-2",
+    "title": "Retail Sales Associate",
+    "company": "Amazon",
+    "location": "Clarkston, GA",
+    "startDate": "2023-08",
+    "endDate": null,
+    "responsibilities": [
+      "Assist an average of 50+ customers daily with product selection and service inquiries",
+      "Maintain customer satisfaction through timely issue resolution and product recommendations",
+      "Process transactions accurately with 99%+ accuracy rate",
+      "Support inventory management and maintain organized merchandising displays",
+      "Assist in onboarding and training of new employees",
+      "Consistently meet or exceed daily and weekly sales performance goals"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-3",
+    "title": "Document Processor",
+    "company": "Docufree Corporation",
+    "location": "Alpharetta, GA",
+    "startDate": "2022-11",
+    "endDate": "2023-02",
+    "responsibilities": [
+      "Processed and digitized 1,000+ documents weekly with high accuracy standards",
+      "Achieved 98%+ data accuracy in database entry and verification tasks",
+      "Scanned, indexed, and archived confidential documents following compliance standards",
+      "Reduced document retrieval time by improving labeling and filing accuracy",
+      "Identified and corrected data discrepancies to maintain system integrity"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-4",
+    "title": "Activity Manager",
+    "company": "Blumont Global Development",
+    "location": "",
+    "startDate": "2018-04",
+    "endDate": "2022-07",
+    "responsibilities": [
+      "Managed and coordinated 20+ community programs and events annually",
+      "Supervised teams of 10–25 staff and volunteers per program cycle",
+      "Increased participant engagement through improved activity planning and outreach strategies",
+      "Managed program budgets ranging from operational constraints while ensuring full compliance",
+      "Achieved 95%+ participant satisfaction based on feedback surveys",
+      "Developed and implemented safety and risk management procedures for all activities"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-5",
+    "title": "Provincial Internship & Apprenticeship Coordinator",
+    "company": "Development Alternative Inc.",
+    "location": "",
+    "startDate": "2016-05",
+    "endDate": "2018-03",
+    "responsibilities": [
+      "Coordinated internship placement programs connecting 200+ candidates with employers",
+      "Built partnerships with 30+ organizations including government, NGOs, and private sector",
+      "Increased placement efficiency through improved matching and screening process",
+      "Delivered training programs to prepare interns for workplace readiness",
+      "Maintained 100% compliance with labor regulations and reporting standards",
+      "Produced monthly program reports tracking outcomes and performance metrics"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-6",
+    "title": "Project Manager",
+    "company": "World Bank – Community Livestock & Agriculture Project",
+    "location": "",
+    "startDate": "2015",
+    "endDate": "2016",
+    "responsibilities": [
+      "Managed agricultural development project budgets exceeding assigned funding allocations",
+      "Coordinated 15+ stakeholders including government, donors, and community groups",
+      "Delivered 100% on-time project reporting and documentation requirements",
+      "Improved project efficiency through resource planning and risk mitigation strategies",
+      "Conducted training programs for farmers and community members on livestock management",
+      "Monitored and evaluated project outcomes to ensure sustainability and impact"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-7",
+    "title": "Field Support Assistant – Grant Development",
+    "company": "International Organization for Migration (IOM)",
+    "location": "",
+    "startDate": "2014-08",
+    "endDate": "2015-08",
+    "responsibilities": [
+      "Supported preparation of 20+ grant applications and funding proposals",
+      "Researched funding opportunities across multiple donor databases",
+      "Assisted in preparing 100% compliant grant reports submitted on time",
+      "Maintained accurate donor communication records and documentation",
+      "Supported grant tracking and compliance monitoring systems"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-8",
+    "title": "Activity Manager",
+    "company": "International Relief and Development",
+    "location": "",
+    "startDate": "2012-06",
+    "endDate": "2014-08",
+    "responsibilities": [
+      "Coordinated 15+ community development activities annually",
+      "Managed teams of staff and volunteers supporting program implementation",
+      "Improved participant engagement through structured activity planning",
+      "Ensured 100% compliance with safety and operational procedures",
+      "Conducted program evaluations and performance reporting"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-9",
+    "title": "Regional Program Manager",
+    "company": "CNFA – Afghan Farm Service Alliance Project",
+    "location": "",
+    "startDate": "2011-05",
+    "endDate": "2012-05",
+    "responsibilities": [
+      "Oversaw regional program operations across multiple districts",
+      "Managed cross-functional teams supporting agriculture development initiatives",
+      "Improved program delivery efficiency through structured planning and monitoring",
+      "Built partnerships with 20+ stakeholders including government and NGOs",
+      "Managed budgets and ensured compliance with donor requirements",
+      "Delivered regular performance and impact reports to senior leadership"
+    ],
+    "achievements": [
+      "Best Coordination Effort Award (2011)",
+      "Best Field Program Manager Award (2011)"
+    ]
+  },
+  {
+    "id": "exp-10",
+    "title": "Data Management Officer",
+    "company": "International Rescue Committee",
+    "location": "",
+    "startDate": "2011-02",
+    "endDate": "2011-05",
+    "responsibilities": [
+      "Managed databases containing 10,000+ records with high accuracy standards",
+      "Improved data quality through validation and cleaning procedures",
+      "Supported reporting systems used for decision-making and program evaluation",
+      "Ensured 100% compliance with data protection and security protocols",
+      "Developed structured reporting dashboards for internal teams"
+    ],
+    "achievements": []
+  },
+  {
+    "id": "exp-11",
+    "title": "District Stabilization Officer",
+    "company": "Development Alternative Inc.",
+    "location": "",
+    "startDate": "2010-03",
+    "endDate": "2011-02",
+    "responsibilities": [
+      "Coordinated stabilization initiatives across local government and community groups",
+      "Supported conflict resolution efforts reducing community tensions",
+      "Facilitated engagement between stakeholders and local authorities",
+      "Assisted in crisis response planning and emergency coordination",
+      "Conducted capacity-building training for local institutions",
+      "Produced field reports tracking stabilization progress and outcomes"
+    ],
+    "achievements": []
+  }
+]

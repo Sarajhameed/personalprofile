@@ -1,0 +1,18 @@
+[
+  {
+    "id": "proj-1",
+    "title": "Social Mobilization Volunteer",
+    "organization": "Habitat for Humanity",
+    "startDate": "2023-06",
+    "endDate": null,
+    "description": "Support community engagement and outreach programs. Assist with volunteer coordination and project activities.",
+    "techStack": [],
+    "features": [
+      "Support community engagement and outreach programs",
+      "Assist with volunteer coordination and project activities"
+    ],
+    "outcome": "",
+    "githubUrl": "",
+    "liveUrl": ""
+  }
+]

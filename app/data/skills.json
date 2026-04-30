@@ -1,0 +1,14 @@
+[
+  { "category": "core", "name": "Case & Client Management", "level": 95 },
+  { "category": "core", "name": "Project & Program Management", "level": 95 },
+  { "category": "core", "name": "Data Management & Reporting", "level": 90 },
+  { "category": "core", "name": "Customer Service Excellence", "level": 92 },
+  { "category": "core", "name": "Stakeholder Coordination", "level": 88 },
+  { "category": "core", "name": "Compliance & Documentation", "level": 93 },
+  { "category": "technical", "name": "Microsoft Office & Power BI", "level": 88 },
+  { "category": "technical", "name": "Salesforce", "level": 85 },
+  { "category": "professional", "name": "Process Improvement", "level": 90 },
+  { "category": "professional", "name": "Team Leadership & Training", "level": 92 },
+  { "category": "professional", "name": "Cross-functional Team Management", "level": 90 },
+  { "category": "professional", "name": "Budget Management", "level": 85 }
+]
