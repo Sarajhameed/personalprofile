@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,43 +16,54 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create transporter
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    })
-
-    // Email content - email stays hidden in backend
-    const mailOptions = {
-      from: `"Portfolio Contact" <${process.env.SMTP_USER}>`,
-      to: 'sarajhameed@hotmail.com', // Hidden - your email
-      subject: `Portfolio Contact: ${subject}`,
-      text: `Subject: ${subject}\n\nMessage:\n${message}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 10px;">New Contact Form Submission</h2>
-          <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 20px;">
-            <p><strong>Subject:</strong> ${subject}</p>
-          </div>
-          <div style="background: #ffffff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 20px;">
-            <p><strong>Message:</strong></p>
-            <p style="white-space: pre-wrap; line-height: 1.6;">${message}</p>
-          </div>
-          <p style="color: #64748b; font-size: 12px; margin-top: 30px; text-align: center;">
-            Sent from your portfolio contact form at ${new Date().toLocaleString()}
-          </p>
-        </div>
-      `,
+    if (message.length < 10) {
+      return NextResponse.json(
+        { error: 'Message must be at least 10 characters' },
+        { status: 400 }
+      )
     }
 
-    // Send email
-    await transporter.sendMail(mailOptions)
+    // Send email using Resend
+    const { data, error } = await resend.emails.send({
+      from: 'Portfolio Contact <onboarding@resend.dev>', // Default verified sender
+      to: ['sarajhameed@hotmail.com'], // Your hidden email
+      subject: `Portfolio Contact: ${subject}`,
+      text: `
+Subject: ${subject}
 
+Message:
+${message}
+
+---
+Sent from your portfolio contact form at ${new Date().toISOString()}
+      `,
+      html: `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2 style="color: #2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 10px;">New Contact Form Submission</h2>
+  
+  <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <p><strong>Subject:</strong> ${subject}</p>
+  </div>
+  
+  <div style="background: #ffffff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 20px;">
+    <p><strong>Message:</strong></p>
+    <p style="white-space: pre-wrap; line-height: 1.6;">${message}</p>
+  </div>
+  
+  <p style="color: #64748b; font-size: 12px; margin-top: 30px; text-align: center;">
+    Sent from your portfolio contact form at ${new Date().toLocaleString()}
+  </p>
+</div>
+      `,
+    })
+
+    if (error) {
+      console.error('Resend error:', error)
+      throw new Error(error.message || 'Failed to send email')
+    }
+
+    console.log('Email sent successfully:', data)
+    
     return NextResponse.json(
       { success: true, message: 'Email sent successfully!' },
       { status: 200 }
@@ -60,10 +73,10 @@ export async function POST(request: NextRequest) {
     
     let errorMessage = 'Failed to send message. Please try again.'
     if (error instanceof Error) {
-      if (error.message.includes('Invalid login')) {
+      if (error.message.includes('API key')) {
         errorMessage = 'Email service configuration error. Please contact directly.'
-      } else if (error.message.includes('Timeout')) {
-        errorMessage = 'Connection timeout. Please try again.'
+      } else if (error.message.includes('rate limit')) {
+        errorMessage = 'Too many requests. Please wait a moment and try again.'
       }
     }
     
