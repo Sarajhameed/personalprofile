@@ -11,25 +11,16 @@ import profileData from '@/data/profile.json'
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
     subject: '',
     message: ''
   })
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [lastSubmitTime, setLastSubmitTime] = useState(0)
 
   const validateForm = () => {
     const errors: Record<string, string> = {}
-
-    // Name is optional - no validation needed
-
-    if (!formData.email.trim()) {
-      errors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'Please enter a valid email address'
-    }
 
     if (!formData.subject.trim()) {
       errors.subject = 'Subject is required'
@@ -39,6 +30,12 @@ export default function ContactSection() {
       errors.message = 'Message is required'
     } else if (formData.message.trim().length < 10) {
       errors.message = 'Message must be at least 10 characters'
+    }
+
+    // Spam prevention: limit to 1 submission per 30 seconds
+    const now = Date.now()
+    if (now - lastSubmitTime < 30000) {
+      errors.spam = 'Please wait 30 seconds before sending another message'
     }
 
     setFieldErrors(errors)
@@ -55,6 +52,7 @@ export default function ContactSection() {
     }
 
     setStatus('submitting')
+    setLastSubmitTime(Date.now())
 
     try {
       const response = await fetch('/api/contact', {
@@ -69,8 +67,10 @@ export default function ContactSection() {
 
       if (response.ok) {
         setStatus('success')
-        setFormData({ name: '', email: '', subject: '', message: '' })
+        setFormData({ subject: '', message: '' })
         setFieldErrors({})
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => setStatus('idle'), 5000)
       } else {
         throw new Error(data.error || 'Failed to send message')
       }
@@ -100,33 +100,6 @@ export default function ContactSection() {
         <motion.form onSubmit={handleSubmit} variants={staggerContainer} className="space-y-6">
           <motion.div variants={fadeInUp}>
             <Input
-              label="Name"
-              placeholder="Your name"
-              value={formData.name}
-              onChange={(value) => setFormData({ ...formData, name: value })}
-              required
-            />
-            {fieldErrors.name && (
-              <p className="text-red-500 text-sm mt-1">{fieldErrors.name}</p>
-            )}
-          </motion.div>
-
-          <motion.div variants={fadeInUp}>
-            <Input
-              label="Email"
-              type="email"
-              placeholder="your@email.com"
-              value={formData.email}
-              onChange={(value) => setFormData({ ...formData, email: value })}
-              required
-            />
-            {fieldErrors.email && (
-              <p className="text-red-500 text-sm mt-1">{fieldErrors.email}</p>
-            )}
-          </motion.div>
-
-          <motion.div variants={fadeInUp}>
-            <Input
               label="Subject"
               placeholder="What is this regarding?"
               value={formData.subject}
@@ -152,32 +125,54 @@ export default function ContactSection() {
             )}
           </motion.div>
 
+          {fieldErrors.spam && (
+            <motion.div variants={fadeInUp} className="text-center">
+              <p className="text-red-500 text-sm">{fieldErrors.spam}</p>
+            </motion.div>
+          )}
+
           <motion.div variants={fadeInUp}>
             <Button
               type="submit"
               disabled={status === 'submitting'}
               className="w-full justify-center"
             >
-              {status === 'submitting' ? 'Sending...' : 'Send Message'}
+              {status === 'submitting' ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Sending...
+                </span>
+              ) : (
+                'Send Message'
+              )}
             </Button>
           </motion.div>
 
           {status === 'success' && (
-            <motion.div variants={fadeInUp} aria-live="polite" className="text-center">
-              <p className="text-blue-600 font-medium mb-2">Message sent successfully! ✓</p>
-              <p className="text-sm text-slate-600">I'll get back to you soon.</p>
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              variants={fadeInUp} 
+              aria-live="polite" 
+              className="text-center bg-blue-50 border border-blue-200 rounded-xl p-4"
+            >
+              <p className="text-blue-700 font-medium mb-1">✓ Message sent successfully!</p>
+              <p className="text-sm text-blue-600">I'll get back to you soon.</p>
             </motion.div>
           )}
           {status === 'error' && (
-            <motion.div variants={fadeInUp} aria-live="polite" className="text-center">
-              <p className="text-red-500 font-medium mb-2">Failed to send message ✗</p>
-              <p className="text-sm text-slate-600">{errorMessage}</p>
-              <p className="text-sm text-slate-600 mt-2">
-                Or email me directly at{' '}
-                <a href={`mailto:${profileData.email}`} className="text-blue-600 hover:underline">
-                  {profileData.email}
-                </a>
-              </p>
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              variants={fadeInUp} 
+              aria-live="polite" 
+              className="text-center bg-red-50 border border-red-200 rounded-xl p-4"
+            >
+              <p className="text-red-700 font-medium mb-1">✗ Failed to send message</p>
+              <p className="text-sm text-red-600">{errorMessage}</p>
             </motion.div>
           )}
         </motion.form>
